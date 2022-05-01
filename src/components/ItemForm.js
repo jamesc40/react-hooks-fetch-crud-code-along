@@ -1,11 +1,34 @@
+// import { json } from "mocha/lib/reporters";
 import React, { useState } from "react";
+// import Item from "./Item";
 
-function ItemForm() {
+function ItemForm({ url, handleNewItems }) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Produce");
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({   
+        name: name,
+        category: category,
+        isInCart: false,
+      })
+    })
+      .then(res => res.json())
+      .then(item => handleNewItems(item))
+
+      setName('')
+      setCategory('Produce')
+  } 
+
   return (
-    <form className="NewItem">
+    <form className="NewItem" onSubmit={handleSubmit}>
       <label>
         Name:
         <input
